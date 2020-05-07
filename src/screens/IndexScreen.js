@@ -10,11 +10,19 @@ import {
 import { Context } from "../context/BlogContext";
 import { Feather } from "@expo/vector-icons";
 
-const IndexScreen = ({ navigation: { navigate } }) => {
-  const { state, addBlogPost, deleteBlogPost } = useContext(Context);
+const IndexScreen = ({ navigation }) => {
+  navigation.setOptions({
+    headerRight: () => (
+      <TouchableOpacity onPress={() => navigation.navigate("Create")}>
+        <Feather name="plus" size={30} />
+      </TouchableOpacity>
+    ),
+  });
+
+  const { state, deleteBlogPost } = useContext(Context);
+
   return (
     <View>
-      <Button title="Add Post" onPress={addBlogPost} />
       <FlatList
         data={state}
         keyExtractor={(blogPost) => blogPost.id}
@@ -22,7 +30,7 @@ const IndexScreen = ({ navigation: { navigate } }) => {
           return (
             <TouchableOpacity
               onPress={() =>
-                navigate("Show", { id: item.id, title: item.title })
+                navigation.navigate("Show", { id: item.id, title: item.title })
               }
             >
               <View style={styles.row}>
